@@ -32,3 +32,14 @@ public class CenotaphsItems
     public string locationD;
     public string locationE;
 }
+
+public class ChatMessage
+{
+    public string Username { get; set; }
+    public string Message { get; set; }
+}
+
+//public class ChatMessageViewModel
+//{
+//    public ObservableCollection<ChatMessage> Messages { get; set; } = new ObservableCollection<ChatMessage>();
+//}

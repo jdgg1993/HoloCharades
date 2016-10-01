@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+//using Microsoft.AspNet.SignalR.Client;
+//using System.Collections.ObjectModel;
 
 public class Sketch : MonoBehaviour {
 
@@ -8,10 +10,20 @@ public class Sketch : MonoBehaviour {
 
     public string websiteURL = "http://infosys320azurelab.azurewebsites.net/tables/Cenotaph?ZUMO-API-VERSION=2.0.0";
 
-    //public Material[] material;
+    //public ChatMessageViewModel ChatVM { get; set; } = new ChatMessageViewModel();
+    //public HubConnection conn { get; set; }
+    //public IHubProxy proxy { get; set; }
+
+    ////public Material[] material;
 
     void Start()
     {
+
+        //conn = new HubConnection("http://socketserverrelay.azurewebsites.net");
+        //proxy = conn.CreateHubProxy("ChatHub");
+        //conn.Start();
+
+        //proxy.On<ChatMessage>("broadcastMessage", OnMessage);
 
         WWW jsonResponse = GET(websiteURL);
 
@@ -95,16 +107,22 @@ public class Sketch : MonoBehaviour {
     public WWW GET(string url)
     {
         WWW www = new WWW(url);
-        
+
         StartCoroutine(WaitForRequest(www));
-        
+
         while (!www.isDone) { }
 
         return www;
     }
-    
+
     private IEnumerator WaitForRequest(WWW www)
     {
         yield return www;
     }
+
+    //private void OnMessage(ChatMessage msg)
+    //{
+    //    ChatVM.Messages.Add(msg);
+    //    Debug.Log(msg.Message);
+    //}
 }
