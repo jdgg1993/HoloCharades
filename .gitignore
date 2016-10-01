@@ -5,7 +5,6 @@ Unity/Obj/
 Unity/Build/
 Unity/Builds/
 Unity/Assets/AssetStoreTools*
-Unity/UWP/
 Unity/Assets/WSATestCertificate.pfx
 Unity/Assets/WSATestCertificate.pfx.meta
 
@@ -19,3 +18,7 @@ Unity/Assets/WSATestCertificate.pfx.meta
 *.pidb
 *.booproj
 *.svd
+Unity/UWP/Assembly-CSharp/obj/
+Unity/UWP/Assembly-CSharp-firstpass/obj/
+Unity/UWP/Assembly-CSharp/bin/
+Unity/UWP/Assembly-CSharp-firstpass/bin/
