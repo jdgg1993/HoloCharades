@@ -7,12 +7,13 @@ using UnityEngine.UI;
 public class Sketch : MonoBehaviour {
 
     public GameObject myPrefab;
+    public TextMesh description;
 
     public string websiteURL = "http://infosys320azurelab.azurewebsites.net/tables/Cenotaph?ZUMO-API-VERSION=2.0.0";
 
     private GameObject newCube;
-    private bool update = false;
     private Cenotaphs cenotaphs;
+    private bool update = false;
     private int i = 0;
 
     //public ChatMessageViewModel ChatVM { get; set; } = new ChatMessageViewModel();
@@ -59,15 +60,18 @@ public class Sketch : MonoBehaviour {
         newCube = (GameObject)Instantiate(myPrefab, new Vector3(0, 0, 2), Quaternion.identity);
         cubeSize = 0.5f;
         newCube.GetComponent<myCubeScript>().setSize(cubeSize);
-        newCube.GetComponent<myCubeScript>().ratateSpeed = 1;
-        newCube.GetComponentInChildren<TextMesh>().text = cenotaph.Surname;
+        newCube.GetComponent<myCubeScript>().ratateSpeed = 0;
+
+        description = (TextMesh)Instantiate(description);
+        description.text = cenotaph.Surname;
+        description.transform.position = new Vector3(0, newCube.transform.lossyScale.y, 2);
     }
 
     void Update()
     {
         if (update && i < cenotaphs.items.Length)
         {
-            newCube.GetComponentInChildren<TextMesh>().text = cenotaphs.items[i].Surname;
+            description.text = cenotaphs.items[i].Surname;
             update = false;
         }
     }
