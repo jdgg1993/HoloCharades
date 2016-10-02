@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using UnityEngine.UI;
 //using Microsoft.AspNet.SignalR.Client;
-//using System.Collections.ObjectModel;
 
 public class Sketch : MonoBehaviour {
 
@@ -10,98 +10,66 @@ public class Sketch : MonoBehaviour {
 
     public string websiteURL = "http://infosys320azurelab.azurewebsites.net/tables/Cenotaph?ZUMO-API-VERSION=2.0.0";
 
+    private GameObject newCube;
+    private bool update = false;
+    private Cenotaphs cenotaphs;
+    private int i = 0;
+
     //public ChatMessageViewModel ChatVM { get; set; } = new ChatMessageViewModel();
     //public HubConnection conn { get; set; }
     //public IHubProxy proxy { get; set; }
-
-    ////public Material[] material;
 
     void Start()
     {
 
         //conn = new HubConnection("http://socketserverrelay.azurewebsites.net");
-        //proxy = conn.CreateHubProxy("ChatHub");
-        //conn.Start();
+        //conn.Error += (e) =>
+        //{
+        ////loadingText.text = "Error establishing connection";
+        //};
 
-        //proxy.On<ChatMessage>("broadcastMessage", OnMessage);
+        //proxy = conn.CreateHubProxy("ChatHub");
+        //proxy.On<ChatMessage>("broadcastMessage", (ChatMessage msg) =>
+        //{
+        //    ChatVM.Messages.Add(msg);
+        //    Debug.Log(msg.Message);
+        //    i++;
+        //    update = true;
+        //});
+
+        //conn.Start();
 
         WWW jsonResponse = GET(websiteURL);
 
         if (string.IsNullOrEmpty(jsonResponse.text))
-        {
             return;
-        }
 
         string text = "{\"items\":" + jsonResponse.text + "}";
 
-        Cenotaphs cenotaphs = Cenotaphs.CreateFromJSON(text);
+        cenotaphs = Cenotaphs.CreateFromJSON(text);
 
         Debug.Log("Number of records: " + cenotaphs.items.Length);
 
         int totalCubes = cenotaphs.items.Length;
-        int totalDistance = 5;
-        int i = 0;
         float cubeSize = 0f;
-        int x1 = 0, x2 = 0, x3 = 0;
-        foreach (CenotaphsItems cenotaph in cenotaphs.items)
-        {
-            float perc = i / (float)totalCubes;
-            i++;
-            float x = perc * totalDistance;
-            float y = 0f;
-            float z = 2.0f;
+        Randomizer.Randomize(cenotaphs.items);
 
-            int ageoAtDeath = int.Parse(cenotaph.ageatdeath);
+        CenotaphsItems cenotaph = cenotaphs.items[0];
 
-            if (ageoAtDeath > 20 && ageoAtDeath <= 45)
-            {
-                y = 0.5f;
-                x = (x1 / (float)totalCubes) * totalDistance + cubeSize;
-                x1++;
-            }
-            else if (ageoAtDeath > 46 && ageoAtDeath <= 65)
-            {
-                y = 0f;
-                x = (x2 / (float)totalCubes) * totalDistance + cubeSize;
-                x2++;
-            }
-            else
-            {
-                y = -0.5f;
-                x = (x3 / (float)totalCubes) * totalDistance + cubeSize;
-                x3++;
-            }
-
-            GameObject newCube = (GameObject)Instantiate(myPrefab, new Vector3(x, y, z), Quaternion.identity);
-            cubeSize = 0.5f;
-            newCube.GetComponent<myCubeScript>().setSize(cubeSize);
-            newCube.GetComponent<myCubeScript>().ratateSpeed = perc;
-            //newCube.GetComponentInChildren<TextMesh>().text = cenotaph.Surname;
-
-            //if (cenotaph.placeofdeath.Contains("New Zealand"))
-            //{
-            //    newCube.GetComponent<Renderer>().material = material[0];
-            //}
-            //else if (cenotaph.placeofdeath.Contains("France"))
-            //{
-            //    newCube.GetComponent<Renderer>().material = material[1];
-            //}
-            //else if (cenotaph.placeofdeath.Contains("Scotland"))
-            //{
-            //    newCube.GetComponent<Renderer>().material = material[2];
-            //}
-            //else if (cenotaph.placeofdeath.Contains("Belgium"))
-            //{
-            //    newCube.GetComponent<Renderer>().material = material[3];
-            //}
-        }
-
-        Debug.Log("Number of cubes created: " + i);
+        newCube = (GameObject)Instantiate(myPrefab, new Vector3(0, 0, 2), Quaternion.identity);
+        cubeSize = 0.5f;
+        newCube.GetComponent<myCubeScript>().setSize(cubeSize);
+        newCube.GetComponent<myCubeScript>().ratateSpeed = 1;
+        newCube.GetComponentInChildren<TextMesh>().text = cenotaph.Surname;
     }
 
     void Update()
     {
-
+        if (update && i < cenotaphs.items.Length)
+        {
+            newCube.GetComponentInChildren<TextMesh>().text = cenotaphs.items[i].Surname;
+            update = false;
+        }
     }
 
     public WWW GET(string url)
@@ -120,9 +88,19 @@ public class Sketch : MonoBehaviour {
         yield return www;
     }
 
-    //private void OnMessage(ChatMessage msg)
-    //{
-    //    ChatVM.Messages.Add(msg);
-    //    Debug.Log(msg.Message);
-    //}
+    public class Randomizer
+    {
+        public static void Randomize<T>(T[] items)
+        {
+            System.Random rand = new System.Random();
+
+            for (int i = 0; i < items.Length - 1; i++)
+            {
+                int j = rand.Next(i, items.Length);
+                T temp = items[i];
+                items[i] = items[j];
+                items[j] = temp;
+            }
+        }
+    }
 }

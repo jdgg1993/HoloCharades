@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 [System.Serializable]
 public class Cenotaphs
@@ -39,7 +40,7 @@ public class ChatMessage
     public string Message { get; set; }
 }
 
-//public class ChatMessageViewModel
-//{
-//    public ObservableCollection<ChatMessage> Messages { get; set; } = new ObservableCollection<ChatMessage>();
-//}
+public class ChatMessageViewModel
+{
+    //public ObservableCollection<ChatMessage> Messages { get; set; } = new ObservableCollection<ChatMessage>();
+}
