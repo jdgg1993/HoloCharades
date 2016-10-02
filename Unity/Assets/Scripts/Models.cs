@@ -42,5 +42,5 @@ public class ChatMessage
 
 public class ChatMessageViewModel
 {
-    //public ObservableCollection<ChatMessage> Messages { get; set; } = new ObservableCollection<ChatMessage>();
+    public ObservableCollection<ChatMessage> Messages { get; set; } = new ObservableCollection<ChatMessage>();
 }

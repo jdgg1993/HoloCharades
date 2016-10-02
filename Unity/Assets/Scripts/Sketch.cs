@@ -26,19 +26,22 @@ public class Sketch : MonoBehaviour {
         //conn = new HubConnection("http://socketserverrelay.azurewebsites.net");
         //conn.Error += (e) =>
         //{
-        ////loadingText.text = "Error establishing connection";
+        //    //loadingText.text = "Error establishing connection";
         //};
 
         //proxy = conn.CreateHubProxy("ChatHub");
         //proxy.On<ChatMessage>("broadcastMessage", (ChatMessage msg) =>
         //{
-        //    ChatVM.Messages.Add(msg);
-        //    Debug.Log(msg.Message);
-        //    i++;
-        //    update = true;
+        //    if (!msg.Username.Equals("HoloLens"))
+        //    {
+        //        ChatVM.Messages.Add(msg);
+        //        Debug.Log(msg.Message);
+        //        i++;
+        //        update = true;
+        //    }
         //});
 
-        //conn.Start();
+        conn.Start();
 
         WWW jsonResponse = GET(websiteURL);
 
@@ -72,6 +75,7 @@ public class Sketch : MonoBehaviour {
         if (update && i < cenotaphs.items.Length)
         {
             description.text = cenotaphs.items[i].Surname;
+            //proxy.Invoke("Send", new ChatMessage { Username = "HoloLens", Message = cenotaphs.items[i].Surname });
             update = false;
         }
     }
