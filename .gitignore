@@ -24,3 +24,10 @@ Unity/UWP/Assembly-CSharp/bin/
 Unity/UWP/Assembly-CSharp-firstpass/bin/
 SignalR Service/obj/
 SignalR Service/bin/
+Xamarin/Charades/Droid/obj
+Xamarin/Charades/packages
+Xamarin/Droid/obj
+Xamarin/packages
+Xamarin/Droid/bin
+Xamarin/Charades/obj
+Xamarin/Charades/bin
