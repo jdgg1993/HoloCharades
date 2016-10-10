@@ -7,7 +7,7 @@
 				<Entry Placeholder="School name" Keyboard="Text" HorizontalOptions="FillAndExpand" Margin="16,0,0,0" />
 			</StackLayout>
 			<StackLayout VerticalOptions="EndAndExpand" >
-				<Button Text="Begin" />
+				<Button Text="Begin" Clicked="Handle_Clicked" />
 			</StackLayout>
 		</StackLayout>
 	</ContentPage.Content>
