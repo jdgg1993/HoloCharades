@@ -1,5 +1,17 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Charades.TimerPage">
 	<ContentPage.Content>
+		<StackLayout VerticalOptions="FillAndExpand" Padding="16" Spacing="0">
+			<Label Text="Current bird" Margin="0,8,0,0" FontSize="14" />
+			<Label x:Name="bird" Text="Kiwi" FontSize="24" />
+			<Label Text="Fact" Margin="0,16,0,0" FontSize="14" />
+			<Label x:Name="facts" Text="Kiwi" FontSize="24" />
+			<Label x:Name="timeLabel" Text="00:00:00" TextColor="Black" HorizontalTextAlignment="Center" FontSize="15" />
+
+
+  			<Button x:Name="stopChrono" BackgroundColor="Black" Text=" stop Chrono" Clicked="OnButtonClicked" TextColor="Red" HorizontalOptions="Center">  </Button>
+
+<!--  			<Button x:Name="pauseChrono" BackgroundColor="Black" Text=" pause Chrono" Clicked="PauseChrono_OnClickednClicked" TextColor="Gray" HorizontalOptions="Center">  </Button>-->
+		</StackLayout>
 	</ContentPage.Content>
 </ContentPage>
