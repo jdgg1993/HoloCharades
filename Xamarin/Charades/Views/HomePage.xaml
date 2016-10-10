@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Charades.HomePage">
+	<ContentPage.Content>
+		<StackLayout VerticalOptions="FillAndExpand" Padding="16">
+			<StackLayout HorizontalOptions="Fill" Orientation="Horizontal" Margin="0,8,0,0">
+				<Image Source="school.png" HeightRequest="24" Margin="0,0,16,0"/>
+				<Entry Placeholder="School name" Keyboard="Text" HorizontalOptions="FillAndExpand" Margin="16,0,0,0" />
+			</StackLayout>
+			<StackLayout VerticalOptions="EndAndExpand" >
+				<Button Text="Begin" />
+			</StackLayout>
+		</StackLayout>
+	</ContentPage.Content>
+</ContentPage>
