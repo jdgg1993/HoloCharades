@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using Microsoft.WindowsAzure.MobileServices;
+using Xamarin.Forms;
 
 namespace Charades
 {
@@ -6,6 +7,8 @@ namespace Charades
 	{
 		public static NavigationPage NavigationPage { get; private set; }
 		private static RootPage RootPage;
+		public static MobileServiceClient MobileService = new MobileServiceClient(Constants.applicationURL);
+
 		public static bool MenuIsPresented
 		{
 			get

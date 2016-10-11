@@ -77,6 +77,7 @@ namespace Charades
 
 		void OnButtonClicked(object sender, EventArgs e)
 		{
+
 			if (cancellationToken != null)
 			{
 				cancellationToken.Cancel();
