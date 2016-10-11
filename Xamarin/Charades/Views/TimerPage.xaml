@@ -3,12 +3,12 @@
 	<ContentPage.Content>
 		<StackLayout VerticalOptions="FillAndExpand" Padding="16" Spacing="0">
 			<Label Text="Current bird" Margin="0,8,0,0" FontSize="14" />
-			<Label x:Name="bird" Text="Kiwi" FontSize="24" />
+			<Label x:Name="bird" Text="-" FontSize="24" TextColor="Black" />
 			<Label Text="Fact" Margin="0,16,0,0" FontSize="14" />
-			<Label x:Name="facts" Text="Kiwi" FontSize="24" />
+			<Label x:Name="facts" Text="-" FontSize="24" TextColor="Black" />
 			<StackLayout Margin="0,72,0,0">
 				<Label x:Name="timeLabel" Text="00:00:00.000" TextColor="Black" HorizontalTextAlignment="Center" FontSize="32" />
-				<StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,32">
+				<StackLayout x:Name="controls" Orientation="Horizontal" HorizontalOptions="Center" Margin="0,32">
 					<Image x:Name="back" Source="back.png"/>
 					<Image x:Name="timeControl" Source="play.png" Margin="16,0"/>
 					<Image x:Name="next" Source="next.png"/>

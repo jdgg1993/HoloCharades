@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNet.SignalR.Client;
 using Xamarin.Forms;
 
 namespace Charades
@@ -17,10 +18,15 @@ namespace Charades
 		public TimeSpan tsSecond = new TimeSpan(0, 0, 1);
 		public bool bRunning = false;
 		private Stopwatch watch = null;
+		public MessagesViewModel ChatVM { get; set; } = new MessagesViewModel();
+		public HubConnection conn { get; set; }
+		public IHubProxy proxy { get; set; }
+		private bool roundStarted = false;
 
 		CancellationTokenSource cancellationToken;
 
 		ObservableCollection<Times> times = new ObservableCollection<Times>();
+
 
 		public TimerPage()
 		{
@@ -35,6 +41,38 @@ namespace Charades
 			var tapImageNext = new TapGestureRecognizer();
 			tapImageNext.Tapped += OnNextButtonClicked;
 			next.GestureRecognizers.Add(tapImageNext);
+
+			SignalR();
+		}
+
+		public void SignalR() 
+		{
+			controls.IsVisible = false;
+
+			timeLabel.Text = "Connecting";
+
+			conn = new HubConnection("http://socketserverrelay.azurewebsites.net");
+			proxy = conn.CreateHubProxy("ChatHub");
+
+			proxy.On<Messages>("broadcastMessage", MessageReceived);
+
+			conn.Start();
+			conn.StateChanged += (change) => 
+			{
+				if (change.NewState.ToString().Equals("Connected"))
+				{
+					Device.BeginInvokeOnMainThread(() => { controls.IsVisible = true; timeLabel.Text = "00:00:00.000";});
+				}
+			};
+		}
+
+
+		public void MessageReceived(Messages msg)
+		{
+			if (!msg.Username.Equals("Xamarin"))
+			{
+				Device.BeginInvokeOnMainThread(() => bird.Text = msg.Message.Trim());
+			}
 		}
 
 		void OnButtonClicked(object sender, EventArgs e)
@@ -53,12 +91,19 @@ namespace Charades
 				TimerRunning(this.cancellationToken.Token);
 				watch.Start();
 			}
+
+			if (!roundStarted)
+			{
+				proxy.Invoke("Send", new Messages { Username = "Xamarin", Message = "" });
+				roundStarted = true;
+			}
 		}
 
 		void OnNextButtonClicked(object sender, EventArgs e)
 		{
 			times.Add(new Times { BirdName = bird.Text.ToString(), TimeComplete = string.Format("{0:00}:{1:00}:{2:00}.{3:000}", watch.Elapsed.Hours, watch.Elapsed.Minutes, watch.Elapsed.Seconds, watch.Elapsed.Milliseconds) });
 			TimeView.ScrollTo(times.LastOrDefault(), ScrollToPosition.End, false);
+			proxy.Invoke("Send", new Messages { Username = "Xamarin", Message = ""});
 		}
 
 		async void TimerRunning(CancellationToken token)
@@ -74,7 +119,6 @@ namespace Charades
 				catch (TaskCanceledException)
 				{
 				}
-				//string.Format("Time: {0}h {1}m {2}s {3}ms", watch.Elapsed.Hours, watch.Elapsed.Minutes, watch.Elapsed.Seconds, watch.Elapsed.Milliseconds);
 				Device.BeginInvokeOnMainThread(() => timeLabel.Text = string.Format("{0:00}:{1:00}:{2:00}.{3:000}", watch.Elapsed.Hours, watch.Elapsed.Minutes, watch.Elapsed.Seconds, watch.Elapsed.Milliseconds));
 			}
 		}
