@@ -15,12 +15,17 @@ namespace Charades
 		public TimeSpan tsCumulative;
 		public TimeSpan tsSecond = new TimeSpan(0, 0, 1);
 		public bool bRunning = false;
+		private Stopwatch watch = null;
 
 		CancellationTokenSource cancellationToken;
 
 		public TimerPage()
 		{
 			InitializeComponent();
+
+			var tapImage = new TapGestureRecognizer(); 
+			tapImage.Tapped += OnButtonClicked;
+			timeControl.GestureRecognizers.Add(tapImage);
 		}
 
 		void OnButtonClicked(object sender, EventArgs e)
@@ -28,20 +33,21 @@ namespace Charades
 			if (cancellationToken != null)
 			{
 				cancellationToken.Cancel();
-				stopChrono.Text = "Start";
+				timeControl.Source = "play.png";
 				cancellationToken = null;
 			}
 			else
 			{
 				cancellationToken = new CancellationTokenSource();
-				stopChrono.Text = "Stop";
+				timeControl.Source = "pause.png";
 				TimerRunning(this.cancellationToken.Token);
 			}
 		}
 
 		async void TimerRunning(CancellationToken token)
 		{
-			var watch = Stopwatch.StartNew();
+			if (watch == null)
+				watch = Stopwatch.StartNew();
 			while (!token.IsCancellationRequested)
 			{
 				try
@@ -51,7 +57,8 @@ namespace Charades
 				catch (TaskCanceledException)
 				{
 				}
-				Device.BeginInvokeOnMainThread(() => timeLabel.Text = watch.Elapsed.ToString());
+				//string.Format("Time: {0}h {1}m {2}s {3}ms", watch.Elapsed.Hours, watch.Elapsed.Minutes, watch.Elapsed.Seconds, watch.Elapsed.Milliseconds);
+				Device.BeginInvokeOnMainThread(() => timeLabel.Text = string.Format("{0:00}:{1:00}:{2:00}.{3:000}", watch.Elapsed.Hours, watch.Elapsed.Minutes, watch.Elapsed.Seconds, watch.Elapsed.Milliseconds));
 			}
 		}
 	}
