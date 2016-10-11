@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -19,13 +20,21 @@ namespace Charades
 
 		CancellationTokenSource cancellationToken;
 
+		ObservableCollection<Times> times = new ObservableCollection<Times>();
+
 		public TimerPage()
 		{
 			InitializeComponent();
 
+			TimeView.ItemsSource = times;
+
 			var tapImage = new TapGestureRecognizer(); 
 			tapImage.Tapped += OnButtonClicked;
 			timeControl.GestureRecognizers.Add(tapImage);
+
+			var tapImageNext = new TapGestureRecognizer();
+			tapImageNext.Tapped += OnNextButtonClicked;
+			next.GestureRecognizers.Add(tapImageNext);
 		}
 
 		void OnButtonClicked(object sender, EventArgs e)
@@ -35,13 +44,21 @@ namespace Charades
 				cancellationToken.Cancel();
 				timeControl.Source = "play.png";
 				cancellationToken = null;
+				watch.Stop();
 			}
 			else
 			{
 				cancellationToken = new CancellationTokenSource();
 				timeControl.Source = "pause.png";
 				TimerRunning(this.cancellationToken.Token);
+				watch.Start();
 			}
+		}
+
+		void OnNextButtonClicked(object sender, EventArgs e)
+		{
+			times.Add(new Times { BirdName = bird.Text.ToString(), TimeComplete = string.Format("{0:00}:{1:00}:{2:00}.{3:000}", watch.Elapsed.Hours, watch.Elapsed.Minutes, watch.Elapsed.Seconds, watch.Elapsed.Milliseconds) });
+			TimeView.ScrollTo(times.LastOrDefault(), ScrollToPosition.End, false);
 		}
 
 		async void TimerRunning(CancellationToken token)
