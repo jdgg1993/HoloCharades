@@ -95,6 +95,7 @@ public class Sketch : MonoBehaviour {
             else
                 k = 0;
 
+            proxy.Invoke("Send", new ChatMessage { Username = "HoloLens", Message = cenotaphs.items[i].commonName + "*" + fi[k].fact });
             changeFacts = true;
         }
         if (timeInAir.Seconds > 30 || (timeInAir.Seconds < 30 && timeInAir.Seconds > 1))
@@ -112,7 +113,7 @@ public class Sketch : MonoBehaviour {
             newCube.GetComponent<Renderer>().material.mainTexture = GET(cenotaphs.items[i].image).texture;
             description.text = fi[k].fact;
 
-            proxy.Invoke("Send", new ChatMessage { Username = "HoloLens", Message = cenotaphs.items[i].commonName });
+            proxy.Invoke("Send", new ChatMessage { Username = "HoloLens", Message = cenotaphs.items[i].commonName + "*" + fi[k].fact });
             update = false;
         }
         else if (update && i >= cenotaphs.items.Length)
