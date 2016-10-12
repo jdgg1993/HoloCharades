@@ -14,6 +14,7 @@ namespace Charades
 
 		async void Handle_Clicked(object sender, System.EventArgs e)
 		{
+			App.SchoolName = name.Text;
 			await Navigation.PushAsync(new TimerPage());
 		}
 	}

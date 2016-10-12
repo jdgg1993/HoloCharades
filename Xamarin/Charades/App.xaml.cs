@@ -8,6 +8,7 @@ namespace Charades
 		public static NavigationPage NavigationPage { get; private set; }
 		private static RootPage RootPage;
 		public static MobileServiceClient MobileService = new MobileServiceClient(Constants.applicationURL);
+		public static string SchoolName;
 
 		public static bool MenuIsPresented
 		{

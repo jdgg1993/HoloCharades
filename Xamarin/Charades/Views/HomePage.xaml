@@ -4,7 +4,7 @@
 		<StackLayout VerticalOptions="FillAndExpand" Padding="16">
 			<StackLayout HorizontalOptions="Fill" Orientation="Horizontal" Margin="0,8,0,0">
 				<Image Source="school.png" HeightRequest="24" Margin="0,0,16,0"/>
-				<Entry Placeholder="School name" Keyboard="Text" HorizontalOptions="FillAndExpand" Margin="16,0,0,0" />
+				<Entry x:Name="name" Placeholder="School name" Keyboard="Text" HorizontalOptions="FillAndExpand" Margin="16,0,0,0" />
 			</StackLayout>
 			<StackLayout VerticalOptions="EndAndExpand" >
 				<Button Text="Begin" Clicked="Handle_Clicked" />
