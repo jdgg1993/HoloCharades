@@ -18,20 +18,14 @@ public class Cenotaphs
 public class CenotaphsItems
 {
     public string id;
-    public string person;
-    public string dateofdeath;
-    public string placeofdeath;
-    public string ageatdeath;
-    public string Surname;
-    public string Firstname;
-    public string cemetery;
-    public string gravereference;
-    public string restingplace;
-    public string locationA;
-    public string locationB;
-    public string locationC;
-    public string locationD;
-    public string locationE;
+    public string createdAt;
+    public string updatedAt;
+    public string version;
+    public bool deleted;
+    public object identifier;
+    public string commonName;
+    public string maoriName;
+    public string image;
 }
 
 public class ChatMessage
@@ -42,5 +36,5 @@ public class ChatMessage
 
 public class ChatMessageViewModel
 {
-    public ObservableCollection<ChatMessage> Messages { get; set; } = new ObservableCollection<ChatMessage>();
+    //public ObservableCollection<ChatMessage> Messages { get; set; } = new ObservableCollection<ChatMessage>();
 }

@@ -2,46 +2,46 @@
 using System.Collections;
 using System;
 using UnityEngine.UI;
-using Microsoft.AspNet.SignalR.Client;
+//using Microsoft.AspNet.SignalR.Client;
 
 public class Sketch : MonoBehaviour {
 
     public GameObject myPrefab;
     public TextMesh description;
 
-    public string websiteURL = "http://infosys320azurelab.azurewebsites.net/tables/Cenotaph?ZUMO-API-VERSION=2.0.0";
+    public string websiteURL = "http://infosys320groupproject.azurewebsites.net/tables/specimen?ZUMO-API-VERSION=2.0.0";
 
     private GameObject newCube;
     private Cenotaphs cenotaphs;
     private bool update = false;
     private int i = -1;
 
-    public ChatMessageViewModel ChatVM { get; set; } = new ChatMessageViewModel();
-    public HubConnection conn { get; set; }
-    public IHubProxy proxy { get; set; }
+    //public ChatMessageViewModel ChatVM { get; set; } = new ChatMessageViewModel();
+    //public HubConnection conn { get; set; }
+    //public IHubProxy proxy { get; set; }
 
     void Start()
     {
 
-        conn = new HubConnection("http://socketserverrelay.azurewebsites.net");
-        conn.Error += (e) =>
-        {
-            //loadingText.text = "Error establishing connection";
-        };
+        //conn = new HubConnection("http://socketserverrelay.azurewebsites.net");
+        //conn.Error += (e) =>
+        //{
+        //    //loadingText.text = "Error establishing connection";
+        //};
 
-        proxy = conn.CreateHubProxy("ChatHub");
-        proxy.On<ChatMessage>("broadcastMessage", (ChatMessage msg) =>
-        {
-            if (!msg.Username.Equals("HoloLens"))
-            {
-                ChatVM.Messages.Add(msg);
-                Debug.Log(msg.Message);
-                i++;
-                update = true;
-            }
-        });
+        //proxy = conn.CreateHubProxy("ChatHub");
+        //proxy.On<ChatMessage>("broadcastMessage", (ChatMessage msg) =>
+        //{
+        //    if (!msg.Username.Equals("HoloLens"))
+        //    {
+        //        ChatVM.Messages.Add(msg);
+        //        Debug.Log(msg.Message);
+        //        i++;
+        //        update = true;
+        //    }
+        //});
 
-        conn.Start();
+        //conn.Start();
 
         WWW jsonResponse = GET(websiteURL);
 
@@ -74,13 +74,13 @@ public class Sketch : MonoBehaviour {
     {
         if (update && i < cenotaphs.items.Length)
         {
-            description.text = cenotaphs.items[i].Surname;
-            proxy.Invoke("Send", new ChatMessage { Username = "HoloLens", Message = cenotaphs.items[i].Surname });
+            description.text = cenotaphs.items[i].commonName;
+            //proxy.Invoke("Send", new ChatMessage { Username = "HoloLens", Message = cenotaphs.items[i].Surname });
             update = false;
         }
         else if (update && i >= cenotaphs.items.Length)
         {
-            proxy.Invoke("Send", new ChatMessage { Username = "HoloLens", Message = "Done" });
+            //proxy.Invoke("Send", new ChatMessage { Username = "HoloLens", Message = "Done" });
             update = false;
         }
     }
