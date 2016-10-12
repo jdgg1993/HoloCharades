@@ -3,6 +3,7 @@ using System.Collections;
 using System;
 using UnityEngine.UI;
 using Microsoft.AspNet.SignalR.Client;
+using System.Collections.Generic;
 
 public class Sketch : MonoBehaviour {
 
@@ -13,8 +14,13 @@ public class Sketch : MonoBehaviour {
 
     private GameObject newCube;
     private Cenotaphs cenotaphs;
+    private Facts facts;
     private bool update = false;
+    private bool changeFacts = false;
     private int i = -1;
+    private int k = 0;
+    private TimeSpan timeInAir;
+    private List<FactItems> fi = new List<FactItems>();
 
     public ChatMessageViewModel ChatVM { get; set; } = new ChatMessageViewModel();
     public HubConnection conn { get; set; }
@@ -52,7 +58,14 @@ public class Sketch : MonoBehaviour {
 
         cenotaphs = Cenotaphs.CreateFromJSON(text);
 
-        Debug.Log("Number of records: " + cenotaphs.items.Length);
+        WWW jsonResponseFacts = GET("http://infosys320groupproject.azurewebsites.net/tables/facts?ZUMO-API-VERSION=2.0.0");
+
+        if (string.IsNullOrEmpty(jsonResponseFacts.text))
+            return;
+
+        string textFacts = "{\"items\":" + jsonResponseFacts.text + "}";
+
+        facts = Facts.CreateFromJSON(textFacts);
 
         int totalCubes = cenotaphs.items.Length;
         float cubeSize = 0f;
@@ -73,10 +86,31 @@ public class Sketch : MonoBehaviour {
 
     void Update()
     {
+        timeInAir += TimeSpan.FromSeconds(Time.deltaTime);
+        if ((timeInAir.Seconds == 30 || timeInAir.Seconds == 1) && fi.Count > 0 && !changeFacts)
+        {
+            k++;
+            if (k < fi.Count)
+                description.text = fi[k].fact;
+            else
+                k = 0;
+
+            changeFacts = true;
+        }
+        if (timeInAir.Seconds > 30 || (timeInAir.Seconds < 30 && timeInAir.Seconds > 1))
+            changeFacts = false;
+
         if (update && i < cenotaphs.items.Length)
         {
+            fi.Clear();
+            k = 0;
+            for (int j = 0; j < facts.items.Length; j++)
+            {
+                if (facts.items[j].specimenId == cenotaphs.items[i].id)
+                    fi.Add(facts.items[j]);
+            }
             newCube.GetComponent<Renderer>().material.mainTexture = GET(cenotaphs.items[i].image).texture;
-            description.text = cenotaphs.items[i].commonName;
+            description.text = fi[k].fact;
 
             proxy.Invoke("Send", new ChatMessage { Username = "HoloLens", Message = cenotaphs.items[i].commonName });
             update = false;
