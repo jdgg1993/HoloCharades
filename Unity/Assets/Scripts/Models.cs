@@ -15,6 +15,17 @@ public class Cenotaphs
 }
 
 [System.Serializable]
+public class Facts
+{
+    public FactItems[] items;
+
+    public static Facts CreateFromJSON(string jsonString)
+    {
+        return JsonUtility.FromJson<Facts>(jsonString);
+    }
+}
+
+[System.Serializable]
 public class CenotaphsItems
 {
     public string id;
@@ -26,6 +37,18 @@ public class CenotaphsItems
     public string commonName;
     public string maoriName;
     public string image;
+}
+
+[System.Serializable]
+public class FactItems
+{
+    public string id;
+    public string createdAt;
+    public string updatedAt;
+    public string version;
+    public bool deleted;
+    public string specimenId;
+    public string fact;
 }
 
 public class ChatMessage
