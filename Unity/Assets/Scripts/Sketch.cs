@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 using UnityEngine.UI;
-//using Microsoft.AspNet.SignalR.Client;
+using Microsoft.AspNet.SignalR.Client;
 
 public class Sketch : MonoBehaviour {
 
@@ -14,32 +14,32 @@ public class Sketch : MonoBehaviour {
     private GameObject newCube;
     private Cenotaphs cenotaphs;
     private bool update = false;
-    private int i = 0;
+    private int i = -1;
 
-    //public ChatMessageViewModel ChatVM { get; set; } = new ChatMessageViewModel();
-    //public HubConnection conn { get; set; }
-    //public IHubProxy proxy { get; set; }
+    public ChatMessageViewModel ChatVM { get; set; } = new ChatMessageViewModel();
+    public HubConnection conn { get; set; }
+    public IHubProxy proxy { get; set; }
 
     void Start()
     {
 
-        //conn = new HubConnection("http://socketserverrelay.azurewebsites.net");
-        //conn.Error += (e) =>
-        //{
-        //    //loadingText.text = "Error establishing connection";
-        //};
+        conn = new HubConnection("http://socketserverrelay.azurewebsites.net");
+        conn.Error += (e) =>
+        {
+            //loadingText.text = "Error establishing connection";
+        };
 
-        //proxy = conn.CreateHubProxy("ChatHub");
-        //proxy.On<ChatMessage>("broadcastMessage", (ChatMessage msg) =>
-        //{
-        //    if (!msg.Username.Equals("HoloLens"))
-        //    {
-        //        ChatVM.Messages.Add(msg);
-        //        Debug.Log(msg.Message);
-        //        i++;
-        //        update = true;
-        //    }
-        //});
+        proxy = conn.CreateHubProxy("ChatHub");
+        proxy.On<ChatMessage>("broadcastMessage", (ChatMessage msg) =>
+        {
+            if (!msg.Username.Equals("HoloLens"))
+            {
+                ChatVM.Messages.Add(msg);
+                Debug.Log(msg.Message);
+                i++;
+                update = true;
+            }
+        });
 
         conn.Start();
 
@@ -66,7 +66,7 @@ public class Sketch : MonoBehaviour {
         newCube.GetComponent<myCubeScript>().ratateSpeed = 0;
 
         description = (TextMesh)Instantiate(description);
-        description.text = cenotaph.Surname;
+        description.text = "Ready";
         description.transform.position = new Vector3(0, newCube.transform.lossyScale.y, 2);
     }
 
@@ -75,7 +75,12 @@ public class Sketch : MonoBehaviour {
         if (update && i < cenotaphs.items.Length)
         {
             description.text = cenotaphs.items[i].Surname;
-            //proxy.Invoke("Send", new ChatMessage { Username = "HoloLens", Message = cenotaphs.items[i].Surname });
+            proxy.Invoke("Send", new ChatMessage { Username = "HoloLens", Message = cenotaphs.items[i].Surname });
+            update = false;
+        }
+        else if (update && i >= cenotaphs.items.Length)
+        {
+            proxy.Invoke("Send", new ChatMessage { Username = "HoloLens", Message = "Done" });
             update = false;
         }
     }
