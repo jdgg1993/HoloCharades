@@ -71,7 +71,18 @@ namespace Charades
 		{
 			if (!msg.Username.Equals("Xamarin"))
 			{
-				Device.BeginInvokeOnMainThread(() => bird.Text = msg.Message.Trim());
+				if (!msg.Message.Equals("Done"))
+					Device.BeginInvokeOnMainThread(() => bird.Text = msg.Message.Trim());
+				else 
+				{
+					Device.BeginInvokeOnMainThread(() => 
+					{
+						OnButtonClicked(null, null);
+						App.TotalTime = string.Format("{0:00}:{1:00}:{2:00}.{3:000}", watch.Elapsed.Hours, watch.Elapsed.Minutes, watch.Elapsed.Seconds, watch.Elapsed.Milliseconds);
+						controls.IsVisible = false;
+						submit.IsVisible = true;
+					});
+				}
 			}
 		}
 
@@ -98,6 +109,14 @@ namespace Charades
 				proxy.Invoke("Send", new Messages { Username = "Xamarin", Message = "" });
 				roundStarted = true;
 			}
+		}
+
+		async void Handle_Clicked(object sender, System.EventArgs e)
+		{
+			submitButton.IsVisible = false;
+			progress.IsVisible = true;
+			await App.MobileService.GetTable<leaderboard>().InsertAsync(new leaderboard { SchoolName = App.SchoolName, TotalTime = App.TotalTime});
+			await App.NavigationPage.Navigation.PushAsync(new LeaderboardPage());
 		}
 
 		void OnNextButtonClicked(object sender, EventArgs e)

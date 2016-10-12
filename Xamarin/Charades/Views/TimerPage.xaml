@@ -13,6 +13,10 @@
 					<Image x:Name="timeControl" Source="play.png" Margin="16,0"/>
 					<Image x:Name="next" Source="next.png"/>
 				</StackLayout>
+				<StackLayout x:Name="submit" Orientation="Horizontal" HorizontalOptions="Center" Margin="0,32" IsVisible="false">
+					<Button x:Name="submitButton" Text="Submit" Clicked="Handle_Clicked" />
+					<ActivityIndicator x:Name="progress" IsRunning="true" Color="Red" IsVisible="false" />
+				</StackLayout>
 				<ListView x:Name="TimeView">
 			    	<ListView.ItemTemplate>
 			     		<DataTemplate>
