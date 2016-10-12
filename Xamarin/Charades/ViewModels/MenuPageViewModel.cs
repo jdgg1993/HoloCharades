@@ -23,7 +23,7 @@ namespace Charades
 
 		void GoSecond(object obj)
 		{
-			App.NavigationPage.Navigation.PushAsync(new SecondPage());
+			App.NavigationPage.Navigation.PushAsync(new LeaderboardPage());
 			App.MenuIsPresented = false;
 		}
 	}
