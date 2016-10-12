@@ -72,7 +72,15 @@ namespace Charades
 			if (!msg.Username.Equals("Xamarin"))
 			{
 				if (!msg.Message.Equals("Done"))
-					Device.BeginInvokeOnMainThread(() => bird.Text = msg.Message.Trim());
+				{
+					Device.BeginInvokeOnMainThread(() =>
+					{
+						string[] separators = { "*" };
+						string[] words = msg.Message.Trim().Split(separators, StringSplitOptions.RemoveEmptyEntries);
+						bird.Text = words[0];
+						facts.Text = words[1];
+					});
+				}
 				else 
 				{
 					Device.BeginInvokeOnMainThread(() => 
